@@ -2,14 +2,27 @@
 #
 # Exercise 1.27
 
-totalCost = 0
+import csv
 
-with open('Data/portfolio.csv', 'rt') as file:
-    next(file)
-    for line in file:
-        list = line.split(',')
-        price = float(list[2])
-        shares = int(list[1])
-        totalCost += price * shares
 
+def portfolio_cost(filename):
+
+    totalCost = 0
+
+    with open(filename, 'rt') as file:
+        rows = csv.reader(file)
+        next(rows)
+        for row in rows:
+            price = float(row[2])
+            try:
+                shares = int(row[1])
+            except ValueError:
+                print("Warning: error parsing line!")
+                continue
+            totalCost += price * shares
+
+    return totalCost
+
+
+totalCost = portfolio_cost('Data/missing.csv')
 print(f"Total cost is ${totalCost}")
